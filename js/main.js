@@ -3,7 +3,10 @@
 var QUANTITY = 8;
 var MIN_PRICE = 1000;
 var MAX_PRICE = 50000;
-var PIN_SIZE = [50, 70];
+var PinSize = {
+  WIDTH: 50,
+  HEIGHT: 70
+};
 var TITLES = ['Заголовок_1', 'Заголовок_2', 'Заголовок_3',
   'Заголовок_4', 'Заголовок_5', 'Заголовок_6', 'Заголовок_7', 'Заголовок_8'
 ];
@@ -29,20 +32,20 @@ var address = document.querySelector('#address');
 var roomNumber = document.querySelector('#room_number');
 var capacity = document.querySelector('#capacity');
 
-var addAtributes = function (collection) {
+var addAttributeDisabled = function (collection) {
   for (var i = 0; i < collection.length; i++) {
     collection[i].setAttribute('disabled', 'disabled');
   }
 };
 
-var deleteaAtributes = function (collection) {
+var deleteAttributeDisabled = function (collection) {
   for (var i = 0; i < collection.length; i++) {
     collection[i].removeAttribute('disabled');
   }
 };
 
-addAtributes(fieldset);
-addAtributes(mapFilters);
+addAttributeDisabled(fieldset);
+addAttributeDisabled(mapFilters);
 
 var randomNumber = function (min, max) {
   var rand = min + Math.random() * (max + 1 - min);
@@ -91,22 +94,21 @@ var createOffer = function (offerNumber) {
   return offers;
 };
 
+var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
+var listElement = document.querySelector('.map__pins');
+var fragment = document.createDocumentFragment();
+
+var createPin = function (pinOffers) {
+  var pin = templatePin.cloneNode(true);
+  pin.style.left = (pinOffers.location.x + PinSize.WIDTH / 2) + 'px';
+  pin.style.top = (pinOffers.location.y + PinSize.HEIGHT / 2) + 'px';
+  pin.querySelector('img').src = pinOffers.author.avatar;
+  pin.querySelector('img').alt = pinOffers.offer.title;
+  return pin;
+};
+
 var doActiveMode = function () {
-
   var offers = createOffer(QUANTITY);
-
-  var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
-  var listElement = document.querySelector('.map__pins');
-  var fragment = document.createDocumentFragment();
-
-  var createPin = function (pinOffers) {
-    var pin = templatePin.cloneNode(true);
-    pin.style = 'left: ' + (pinOffers.location.x + PIN_SIZE[0] / 2) + 'px; top: ' + (pinOffers.location.y + PIN_SIZE[1] / 2) + 'px;';
-    pin.querySelector('img').src = pinOffers.author.avatar;
-    pin.querySelector('img').alt = pinOffers.offer.title;
-    return pin;
-  };
-
   for (var i = 0; i < offers.length; i++) {
     fragment.appendChild(createPin(offers[i]));
   }
@@ -116,31 +118,31 @@ var doActiveMode = function () {
   var map = document.querySelector('.map');
   map.classList.remove('map--faded');
 
-  deleteaAtributes(fieldset);
-  deleteaAtributes(mapFilters);
+  deleteAttributeDisabled(fieldset);
+  deleteAttributeDisabled(mapFilters);
 
   addForm.classList.remove('ad-form--disabled');
 };
 
 
-var showSimilarAdsMouse = function () {
-  if (event.which === 1) {
+var onPinMousedown = function (evt) {
+  if (evt.button === 0) {
     doActiveMode();
+    mapPin.removeEventListener('mousedown', onPinMousedown);
+    mapPin.removeEventListener('keydown', onPinKeydown);
   }
-  mapPin.removeEventListener('mousedown', showSimilarAdsMouse);
-  mapPin.removeEventListener('keydown', showSimilarAdsKey);
 };
 
-var showSimilarAdsKey = function (evt) {
+var onPinKeydown = function (evt) {
   if (evt.key === 'Enter') {
     doActiveMode();
   }
-  mapPin.removeEventListener('keydown', showSimilarAdsKey);
-  mapPin.removeEventListener('mousedown', showSimilarAdsMouse);
+  mapPin.removeEventListener('keydown', onPinKeydown);
+  mapPin.removeEventListener('mousedown', onPinMousedown);
 };
 
-mapPin.addEventListener('mousedown', showSimilarAdsMouse);
-mapPin.addEventListener('keydown', showSimilarAdsKey);
+mapPin.addEventListener('mousedown', onPinMousedown);
+mapPin.addEventListener('keydown', onPinKeydown);
 
 var checkRoomNumberAndCapacity = function () {
   if (roomNumber.value === '1' && capacity.value !== '1') {
@@ -170,8 +172,8 @@ capacity.addEventListener('change', function () {
 
 
 var getCoordinates = function () {
-  var x = mapPin.offsetLeft + PIN_SIZE[0] / 2;
-  var y = mapPin.offsetTop + PIN_SIZE[1] / 2;
+  var x = mapPin.offsetLeft + PinSize.WIDTH / 2;
+  var y = mapPin.offsetTop + PinSize.HEIGHT / 2;
   address.value = x + ', ' + y;
 };
 
