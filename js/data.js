@@ -16,63 +16,56 @@
     'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
   ];
-  var MIN_PRICE = 1000;
-  var MAX_PRICE = 50000;
-  var PinSize = {
-    WIDTH: 50,
-    HEIGHT: 70
+  var Price = {
+    MIN_PRICE: 1000,
+    MAX_PRICE: 50000
+  };
+  var CoordinateY = {
+    FIRST_COORDINATE: 130,
+    SECOND_COORDINATE: 630
   };
   var offsetWidth = document.querySelector('.map').offsetWidth;
 
   var createAvatar = function (number) {
-    var avatar = 'img/avatars/user0' + number + '.png';
-    return avatar;
+    return 'img/avatars/user0' + number + '.png';
   };
-  var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
-  var listElement = document.querySelector('.map__pins');
-  var fragment = document.createDocumentFragment();
+
+  var offers = [];
+
+  var createOffer = function () {
+    var locationX = window.utils.randomNumber(0, offsetWidth);
+    var locationY = window.utils.randomNumber(CoordinateY.FIRST_COORDINATE, CoordinateY.SECOND_COORDINATE);
+
+    offers.push({
+      'author': {
+        'avatar': createAvatar(window.utils.randomNumber(1, 8))
+      },
+      'offer': {
+        'title': window.utils.randomElement(TITLES),
+        'address': locationX + ', ' + locationY,
+        'price': window.utils.randomNumber(Price.MIN_PRICE, Price.MAX_PRICE),
+        'type': window.utils.randomElement(TYPES),
+        'rooms': window.utils.randomElement(ROOMS),
+        'guests': window.utils.randomElement(GUESTS),
+        'checkin': window.utils.randomElement(CHECKIN),
+        'checkout': window.utils.randomElement(CHECKOUT),
+        'features': window.utils.randomElement(FEATURES),
+        'description': window.utils.randomElement(DESCRIPTION),
+        'photos': window.utils.randomElement(PHOTOS)
+      },
+      'location': {
+        'x': locationX,
+        'y': locationY
+      }
+    });
+  };
 
   window.data = {
-    createOffer: function (offerNumber) {
-      var offers = [];
+    createOffers: function (offerNumber) {
       for (var i = 0; i < offerNumber; i++) {
-        var locationX = window.utils.randomNumber(0, offsetWidth);
-        var locationY = window.utils.randomNumber(130, 630);
-
-        offers.push({
-          'author': {
-            'avatar': createAvatar(window.utils.randomNumber(1, 8))
-          },
-          'offer': {
-            'title': window.utils.randomElement(TITLES),
-            'address': locationX + ', ' + locationY,
-            'price': window.utils.randomNumber(MIN_PRICE, MAX_PRICE),
-            'type': window.utils.randomElement(TYPES),
-            'rooms': window.utils.randomElement(ROOMS),
-            'guests': window.utils.randomElement(GUESTS),
-            'checkin': window.utils.randomElement(CHECKIN),
-            'checkout': window.utils.randomElement(CHECKOUT),
-            'features': window.utils.randomElement(FEATURES),
-            'description': window.utils.randomElement(DESCRIPTION),
-            'photos': window.utils.randomElement(PHOTOS)
-          },
-          'location': {
-            'x': locationX,
-            'y': locationY
-          }
-        });
+        createOffer();
       }
       return offers;
-    },
-    listElement: listElement,
-    fragment: fragment,
-    createPin: function (pinOffers) {
-      var pin = templatePin.cloneNode(true);
-      pin.style.left = (pinOffers.location.x + PinSize.WIDTH / 2) + 'px';
-      pin.style.top = (pinOffers.location.y + PinSize.HEIGHT / 2) + 'px';
-      pin.querySelector('img').src = pinOffers.author.avatar;
-      pin.querySelector('img').alt = pinOffers.offer.title;
-      return pin;
     }
   };
 })();

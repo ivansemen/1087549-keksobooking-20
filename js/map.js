@@ -6,12 +6,14 @@
   var mapPin = document.querySelector('.map__pin--main');
   var fieldset = document.querySelectorAll('fieldset');
   var addForm = document.querySelector('.ad-form');
+  var listElement = document.querySelector('.map__pins');
+  var fragment = document.createDocumentFragment();
   var doActiveMode = function () {
-    var offers = window.data.createOffer(QUANTITY);
+    var offers = window.data.createOffers(QUANTITY);
     for (var i = 0; i < offers.length; i++) {
-      window.data.fragment.appendChild(window.data.createPin(offers[i]));
+      fragment.appendChild(window.pin.createPin(offers[i]));
     }
-    window.data.listElement.appendChild(window.data.fragment);
+    listElement.appendChild(fragment);
 
 
     var map = document.querySelector('.map');

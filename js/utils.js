@@ -13,8 +13,7 @@
       }
     },
     randomNumber: function (min, max) {
-      var rand = min + Math.random() * (max + 1 - min);
-      return Math.floor(rand);
+      return Math.floor(min + Math.random() * (max + 1 - min));
     },
     randomElement: function (array) {
       var elementOfArray = Math.floor(Math.random() * array.length);
