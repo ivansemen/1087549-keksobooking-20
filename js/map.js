@@ -10,7 +10,7 @@
   var doActiveMode = function () {
     var successHandler = function (offers) {
       var fragment = document.createDocumentFragment();
-      for (var i = 0; i < offers.length; i++) {
+      for (var i = 0; i < QUANTITY; i++) {
         fragment.appendChild(window.pin.createPin(offers[i]));
       }
       listElement.appendChild(fragment);
