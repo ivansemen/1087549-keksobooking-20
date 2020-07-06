@@ -5,6 +5,7 @@
     OK: 200
   };
   var TIMEOUT_IN_MS = 10000;
+  var mapFilters = document.querySelectorAll('.map__filters select');
 
   window.backend = {
     load: function (onLoad, onError) {
@@ -23,6 +24,7 @@
       xhr.addEventListener('error', function () {
         onError('Произошла ошибка соединения');
       });
+
       xhr.addEventListener('timeout', function () {
         onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
       });
@@ -31,6 +33,8 @@
 
       xhr.open('GET', URL);
       xhr.send();
+
+      window.utils.deleteAttributeDisabled(mapFilters);
     }
   };
 })();
