@@ -26,8 +26,8 @@
   roomNumber.addEventListener('change', function () {
     checkRoomNumberAndCapacity();
   });
+
   capacity.addEventListener('change', function () {
     checkRoomNumberAndCapacity();
   });
-
 })();
