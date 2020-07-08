@@ -46,6 +46,7 @@
   var successHandler = function (data) {
     offers = data;
     updatePins();
+    window.renderCard(data);
   };
 
   var errorHandler = function (errorMessage) {
