@@ -7,7 +7,8 @@
   var offers = [];
   var typeOfHouse = document.querySelector('#housing-type');
 
-  var updatePins = function () {
+
+  var renderTypeOfHouse = function () {
     var filterTypeOfHouse = [];
     switch (typeOfHouse.value) {
       case 'flat':
@@ -35,15 +36,17 @@
           return it;
         });
     }
-    window.render(filterTypeOfHouse);
-    typeOfHouse.removeEventListener('change', function () {
-      updatePins();
-    });
+    window.renderPin(filterTypeOfHouse);
+  };
+
+  var updatePins = function () {
+    renderTypeOfHouse();
   };
 
   var successHandler = function (data) {
     offers = data;
     updatePins();
+    window.renderCard(data);
   };
 
   var errorHandler = function (errorMessage) {

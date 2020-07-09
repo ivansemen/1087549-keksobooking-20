@@ -18,7 +18,7 @@
     return pin;
   };
 
-  window.render = function (data) {
+  window.renderPin = function (data) {
     var takeNumber = data.length > QUANTITY ? QUANTITY : data.length;
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < takeNumber; i++) {
