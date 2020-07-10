@@ -7,7 +7,6 @@
   var offers = [];
   var typeOfHouse = document.querySelector('#housing-type');
 
-
   var renderTypeOfHouse = function () {
     var filterTypeOfHouse = [];
     switch (typeOfHouse.value) {
@@ -46,7 +45,9 @@
   var successHandler = function (data) {
     offers = data;
     updatePins();
-    window.renderCard(data);
+    // for (var j = 0; j < window.pins.length; j++) {
+    //   window.pins[j].addEventListener('click', window.renderCard(data[j]));
+    // }
   };
 
   var errorHandler = function (errorMessage) {

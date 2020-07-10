@@ -4,6 +4,7 @@
   var templateCard = document.querySelector('#card').content.querySelector('.map__card');
   var map = document.querySelector('.map');
   var mapContainer = document.querySelector('.map__filters-container');
+  var mapPins = document.getElementById('map__pins');
 
   var createCard = function (cardOffers) {
     var card = templateCard.cloneNode(true);
@@ -46,6 +47,22 @@
   };
 
   window.renderCard = function (data) {
-    mapContainer.before(map.appendChild(createCard(data[0])));
+    map.innerHTML = '';
+    map.appendChild(mapPins);
+    map.appendChild(mapContainer);
+    mapContainer.before(map.appendChild(createCard(data)));
+    var mapCard = document.querySelector('.map__card');
+    var closeCard = document.querySelector('.popup__close');
+
+    closeCard.addEventListener('click', function () {
+      map.removeChild(mapCard);
+    });
+
+    document.addEventListener('keydown', function (evt) {
+      if (evt.key === 'Escape') {
+        evt.preventDefault();
+        map.removeChild(mapCard);
+      }
+    });
   };
 })();
