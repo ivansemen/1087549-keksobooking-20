@@ -46,7 +46,7 @@
     return card;
   };
 
-  window.renderCard = function (data) {
+  var renderCard = function (data) {
     map.innerHTML = '';
     map.appendChild(mapPins);
     map.appendChild(mapContainer);
@@ -55,14 +55,34 @@
     var closeCard = document.querySelector('.popup__close');
 
     closeCard.addEventListener('click', function () {
-      map.removeChild(mapCard);
+      closePopup(map, mapCard);
     });
 
-    document.addEventListener('keydown', function (evt) {
-      if (evt.key === 'Escape') {
-        evt.preventDefault();
-        map.removeChild(mapCard);
-      }
-    });
+    // document.addEventListener('keydown', function (evt) {
+    //   // if (evt.key === 'Escape') {
+    //     // evt.preventDefault();
+    //     closePopup(map, mapCard);
+    //   // }
+    // });
+  };
+
+  var onPopupEscPress = function (evt) {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      closePopup();
+    }
+  };
+
+  window.openPopup = function (pinOffers) {
+    renderCard(pinOffers);
+
+    document.addEventListener('keydown', onPopupEscPress);
+  };
+
+  var closePopup = function () {
+    var mapCard = document.querySelector('.map__card');
+    map.removeChild(mapCard);
+
+    document.removeEventListener('keydown', onPopupEscPress);
   };
 })();

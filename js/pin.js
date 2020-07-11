@@ -17,13 +17,13 @@
     pin.querySelector('img').alt = pinOffers.offer.title;
 
     pin.addEventListener('click', function () {
-      window.renderCard(pinOffers);
+      window.openPopup(pinOffers);
     });
 
     pin.addEventListener('keydown', function (evt) {
       if (evt.key === 'Enter') {
         evt.preventDefault();
-        window.renderCard(pinOffers);
+        window.openPopup(pinOffers);
       }
     });
     return pin;
