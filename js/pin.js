@@ -15,12 +15,24 @@
     pin.style.top = (pinOffers.location.y + PinSize.HEIGHT / 2) + 'px';
     pin.querySelector('img').src = pinOffers.author.avatar;
     pin.querySelector('img').alt = pinOffers.offer.title;
+
+    pin.addEventListener('click', function () {
+      window.openPopup(pinOffers);
+    });
+
+    pin.addEventListener('keydown', function (evt) {
+      if (evt.key === 'Enter') {
+        evt.preventDefault();
+        window.openPopup(pinOffers);
+      }
+    });
     return pin;
   };
 
   window.renderPin = function (data) {
     var takeNumber = data.length > QUANTITY ? QUANTITY : data.length;
     var fragment = document.createDocumentFragment();
+
     for (var i = 0; i < takeNumber; i++) {
       fragment.appendChild(createPin(data[i]));
     }

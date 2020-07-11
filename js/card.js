@@ -4,6 +4,7 @@
   var templateCard = document.querySelector('#card').content.querySelector('.map__card');
   var map = document.querySelector('.map');
   var mapContainer = document.querySelector('.map__filters-container');
+  var mapPins = document.getElementById('map__pins');
 
   var createCard = function (cardOffers) {
     var card = templateCard.cloneNode(true);
@@ -45,7 +46,43 @@
     return card;
   };
 
-  window.renderCard = function (data) {
-    mapContainer.before(map.appendChild(createCard(data[0])));
+  var renderCard = function (data) {
+    map.innerHTML = '';
+    map.appendChild(mapPins);
+    map.appendChild(mapContainer);
+    mapContainer.before(map.appendChild(createCard(data)));
+    var mapCard = document.querySelector('.map__card');
+    var closeCard = document.querySelector('.popup__close');
+
+    closeCard.addEventListener('click', function () {
+      closePopup(map, mapCard);
+    });
+
+    // document.addEventListener('keydown', function (evt) {
+    //   // if (evt.key === 'Escape') {
+    //     // evt.preventDefault();
+    //     closePopup(map, mapCard);
+    //   // }
+    // });
+  };
+
+  var onPopupEscPress = function (evt) {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      closePopup();
+    }
+  };
+
+  window.openPopup = function (pinOffers) {
+    renderCard(pinOffers);
+
+    document.addEventListener('keydown', onPopupEscPress);
+  };
+
+  var closePopup = function () {
+    var mapCard = document.querySelector('.map__card');
+    map.removeChild(mapCard);
+
+    document.removeEventListener('keydown', onPopupEscPress);
   };
 })();
