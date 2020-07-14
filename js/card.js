@@ -57,13 +57,6 @@
     closeCard.addEventListener('click', function () {
       closePopup(map, mapCard);
     });
-
-    // document.addEventListener('keydown', function (evt) {
-    //   // if (evt.key === 'Escape') {
-    //     // evt.preventDefault();
-    //     closePopup(map, mapCard);
-    //   // }
-    // });
   };
 
   var onPopupEscPress = function (evt) {
