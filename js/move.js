@@ -2,7 +2,7 @@
 
 (function () {
   var mainPinHandler = document.querySelector('.map__pin--main');
-  var Y = {
+  var YCoordinates = {
     MIN: 130,
     MAX: 630
   };
@@ -26,12 +26,9 @@
       y: evt.clientY
     };
 
-    var dragged = false;
-
     var onMouseMove = function (moveEvt) {
+      var offsetTopPin = mainPinHandler.offsetTop;
       moveEvt.preventDefault();
-
-      dragged = true;
 
       var shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -43,14 +40,14 @@
         y: moveEvt.clientY
       };
 
-      address.value = (mainPinHandler.offsetLeft - shift.x + PinSize.WIDTH / 2) + ', ' + (mainPinHandler.offsetTop - shift.y + PinSize.HEIGHT);
+      address.value = (mainPinHandler.offsetLeft - shift.x + PinSize.WIDTH / 2) + ', ' + (offsetTopPin - shift.y + PinSize.HEIGHT);
 
-      if (mainPinHandler.offsetTop - shift.y > Y.MIN && mainPinHandler.offsetTop - shift.y < Y.MAX) {
-        mainPinHandler.style.top = (mainPinHandler.offsetTop - shift.y) + 'px';
-      } else if (mainPinHandler.offsetTop - shift.y < Y.MIN) {
-        mainPinHandler.style.top = Y.MIN;
-      } else if (mainPinHandler.offsetTop - shift.y > Y.MAX) {
-        mainPinHandler.style.top = Y.MAX;
+      if (offsetTopPin - shift.y > YCoordinates.MIN && offsetTopPin - shift.y < YCoordinates.MAX) {
+        mainPinHandler.style.top = (offsetTopPin - shift.y) + 'px';
+      } else if (offsetTopPin - shift.y < YCoordinates.MIN) {
+        mainPinHandler.style.top = YCoordinates.MIN;
+      } else if (offsetTopPin - shift.y > YCoordinates.MAX) {
+        mainPinHandler.style.top = YCoordinates.MAX;
       }
 
       if (mainPinHandler.offsetLeft - shift.x > leftMap && mainPinHandler.offsetLeft - shift.x < rightMap) {
@@ -67,14 +64,6 @@
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-
-      if (dragged) {
-        var onClickPreventDefault = function (clickEvt) {
-          clickEvt.preventDefault();
-          mainPinHandler.removeEventListener('click', onClickPreventDefault);
-        };
-        mainPinHandler.addEventListener('click', onClickPreventDefault);
-      }
     };
 
     document.addEventListener('mousemove', onMouseMove);
