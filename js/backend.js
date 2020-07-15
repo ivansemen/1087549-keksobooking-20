@@ -1,6 +1,9 @@
 'use strict';
 (function () {
-  var URL = 'https://javascript.pages.academy/keksobooking/data';
+  var URL = {
+    LOAD: 'https://javascript.pages.academy/keksobooking/data',
+    UPLOAD: 'https://javascript.pages.academy/keksobooking'
+  };
   var StatusCode = {
     OK: 200
   };
@@ -31,10 +34,29 @@
 
       xhr.timeout = TIMEOUT_IN_MS;
 
-      xhr.open('GET', URL);
+      xhr.open('GET', URL.LOAD);
       xhr.send();
 
       window.utils.deleteAttributeDisabled(mapFilters);
+    },
+    upload: function (data, onSuccess, onError) {
+      var xhr = new XMLHttpRequest();
+      xhr.responseType = 'json';
+
+      xhr.addEventListener('load', function () {
+        if (xhr.status === StatusCode.OK) {
+          onSuccess(xhr.response);
+        } else {
+          onError();
+        }
+      });
+
+      xhr.addEventListener('error', function () {
+        onError();
+      });
+
+      xhr.open('POST', URL.UPLOAD);
+      xhr.send(data);
     }
   };
 })();
