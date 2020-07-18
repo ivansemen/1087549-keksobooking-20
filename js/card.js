@@ -14,10 +14,24 @@
     card.querySelector('.popup__title').textContent = cardOffers.offer.title;
     card.querySelector('.popup__text--address').textContent = cardOffers.offer.address;
     card.querySelector('.popup__text--price').textContent = cardOffers.offer.price + '₽/ночь';
-    card.querySelector('.popup__type').textContent = cardOffers.offer.type;
     card.querySelector('.popup__text--capacity').textContent = cardOffers.offer.rooms + ' комнаты для ' + cardOffers.offer.guests + ' гостей';
     card.querySelector('.popup__text--time').textContent = 'Заезд после ' + cardOffers.offer.checkin + ', выезд до ' + cardOffers.offer.checkout;
     card.querySelector('.popup__description').textContent = cardOffers.offer.description;
+
+    switch (cardOffers.offer.type) {
+      case 'palace':
+        card.querySelector('.popup__type').textContent = 'Дворец';
+        break;
+      case 'flat':
+        card.querySelector('.popup__type').textContent = 'Квартира';
+        break;
+      case 'house':
+        card.querySelector('.popup__type').textContent = 'Дом';
+        break;
+      case 'bungalo':
+        card.querySelector('.popup__type').textContent = 'Бунгало';
+        break;
+    }
 
     if (cardOffers.offer.features.length > 0) {
       featuresPopup.innerHTML = '';

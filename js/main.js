@@ -4,6 +4,8 @@
   var mapFilters = document.querySelectorAll('.map__filters select');
   var fieldset = document.querySelectorAll('fieldset');
   var map = document.querySelector('.map');
+  var mapContainer = document.querySelector('.map__filters-container');
+  var mapPins = document.getElementById('map__pins');
   var addForm = document.querySelector('.ad-form');
   var typeOfHouse = document.querySelector('#housing-type');
   var priceOfHouse = document.querySelector('#housing-price');
@@ -19,277 +21,147 @@
   var offers = [];
   var mapOverlay = document.querySelector('.map__overlay');
   var mapPin = document.querySelector('.map__pin--main');
+  var MapPinCoordinates = {
+    LEFT: 570,
+    TOP: 375
+  };
 
   window.utils.addAttributeDisabled(fieldset);
   window.utils.addAttributeDisabled(mapFilters);
 
-  var updatePins = function () {
-    var sameTypeOfHouse = [];
-    var samePriceOfHouse = [];
-    var sameRoomsOfHouse = [];
-    var sameGuestsOfHouse = [];
+  var updatePins = function (array) {
+    map.innerHTML = '';
+    map.appendChild(mapPins);
+    map.appendChild(mapContainer);
+    var offersCopy = array.slice();
 
-    switch (typeOfHouse.value) {
-      case 'flat':
-        sameTypeOfHouse = offers.filter(function (it) {
-          return it.offer.type === 'flat';
-        });
-        break;
-      case 'house':
-        sameTypeOfHouse = offers.filter(function (it) {
-          return it.offer.type === 'house';
-        });
-        break;
-      case 'bungalo':
-        sameTypeOfHouse = offers.filter(function (it) {
-          return it.offer.type === 'bungalo';
-        });
-        break;
-      case 'palace':
-        sameTypeOfHouse = offers.filter(function (it) {
-          return it.offer.type === 'palace';
-        });
-        break;
-      default:
-        sameTypeOfHouse = offers.filter(function (it) {
-          return it;
-        });
-
+    if (typeOfHouse.value !== 'any') {
+      offersCopy = offersCopy.filter(function (it) {
+        return it.offer.type === typeOfHouse.value;
+      });
     }
 
     switch (priceOfHouse.value) {
       case 'middle':
-        samePriceOfHouse = offers.filter(function (it) {
+        offersCopy = offersCopy.filter(function (it) {
           return it.offer.price > 10000 && it.offer.price < 50000;
         });
         break;
       case 'low':
-        samePriceOfHouse = offers.filter(function (it) {
+        offersCopy = offersCopy.filter(function (it) {
           return it.offer.price < 10000;
         });
         break;
       case 'high':
-        samePriceOfHouse = offers.filter(function (it) {
+        offersCopy = offersCopy.filter(function (it) {
           return it.offer.price > 50000;
         });
         break;
       default:
-        samePriceOfHouse = offers.filter(function (it) {
+        offersCopy = offersCopy.filter(function (it) {
           return it;
         });
     }
 
     switch (numberOfRooms.value) {
       case '1':
-        sameRoomsOfHouse = offers.filter(function (it) {
+        offersCopy = offersCopy.filter(function (it) {
           return it.offer.rooms === 1;
         });
         break;
       case '2':
-        sameRoomsOfHouse = offers.filter(function (it) {
+        offersCopy = offersCopy.filter(function (it) {
           return it.offer.rooms === 2;
         });
         break;
       case '3':
-        sameRoomsOfHouse = offers.filter(function (it) {
+        offersCopy = offersCopy.filter(function (it) {
           return it.offer.rooms === 3;
         });
         break;
       default:
-        sameRoomsOfHouse = offers.filter(function (it) {
+        offersCopy = offersCopy.filter(function (it) {
           return it;
         });
     }
 
     switch (numberOfGuests.value) {
       case '2':
-        sameGuestsOfHouse = offers.filter(function (it) {
+        offersCopy = offersCopy.filter(function (it) {
           return it.offer.guests === 2;
         });
         break;
       case '1':
-        sameGuestsOfHouse = offers.filter(function (it) {
+        offersCopy = offersCopy.filter(function (it) {
           return it.offer.guests === 1;
         });
         break;
       case '0':
-        sameGuestsOfHouse = offers.filter(function (it) {
+        offersCopy = offersCopy.filter(function (it) {
           return it.offer.guests === 0;
         });
         break;
       default:
-        sameGuestsOfHouse = offers.filter(function (it) {
+        offersCopy = offersCopy.filter(function (it) {
           return it;
         });
     }
 
+
     if (filterWifi.checked) {
-      var wifiFeature = offers.filter(function (it) {
-        for (var i = 0; i < it.offer.features.length; i++) {
-          if (it.offer.features[i] === 'wifi') {
-            var wifiHouse = it;
-          }
-        }
-        return wifiHouse;
-      });
-    } else {
-      wifiFeature = offers.filter(function (it) {
-        return it;
+      offersCopy = offersCopy.filter(function (it) {
+        return it.offer.features.some(function (feature) {
+          return feature === 'wifi';
+        });
       });
     }
 
     if (filterDishwasher.checked) {
-      var dishwasherFeature = offers.filter(function (it) {
-        for (var i = 0; i < it.offer.features.length; i++) {
-          if (it.offer.features[i] === 'dishwasher') {
-            var dishwasherHouse = it;
-          }
-        }
-        return dishwasherHouse;
-      });
-    } else {
-      dishwasherFeature = offers.filter(function (it) {
-        return it;
+      offersCopy = offersCopy.filter(function (it) {
+        return it.offer.features.some(function (feature) {
+          return feature === 'dishwasher';
+        });
       });
     }
 
     if (filterParking.checked) {
-      var parkingFeature = offers.filter(function (it) {
-        for (var i = 0; i < it.offer.features.length; i++) {
-          if (it.offer.features[i] === 'parking') {
-            var parkingHouse = it;
-          }
-        }
-        return parkingHouse;
-      });
-    } else {
-      parkingFeature = offers.filter(function (it) {
-        return it;
+      offersCopy = offersCopy.filter(function (it) {
+        return it.offer.features.some(function (feature) {
+          return feature === 'parking';
+        });
       });
     }
 
     if (filterWasher.checked) {
-      var washerFeature = offers.filter(function (it) {
-        for (var i = 0; i < it.offer.features.length; i++) {
-          if (it.offer.features[i] === 'washer') {
-            var washerHouse = it;
-          }
-        }
-        return washerHouse;
-      });
-    } else {
-      washerFeature = offers.filter(function (it) {
-        return it;
+      offersCopy = offersCopy.filter(function (it) {
+        return it.offer.features.some(function (feature) {
+          return feature === 'washer';
+        });
       });
     }
 
     if (filterElevator.checked) {
-      var elevatorFeature = offers.filter(function (it) {
-        for (var i = 0; i < it.offer.features.length; i++) {
-          if (it.offer.features[i] === 'elevator') {
-            var elevatorHouse = it;
-          }
-        }
-        return elevatorHouse;
-      });
-    } else {
-      elevatorFeature = offers.filter(function (it) {
-        return it;
+      offersCopy = offersCopy.filter(function (it) {
+        return it.offer.features.some(function (feature) {
+          return feature === 'elevator';
+        });
       });
     }
 
     if (filterConditioner.checked) {
-      var conditionerFeature = offers.filter(function (it) {
-        for (var i = 0; i < it.offer.features.length; i++) {
-          if (it.offer.features[i] === 'conditioner') {
-            var conditionerHouse = it;
-          }
-        }
-        return conditionerHouse;
-      });
-    } else {
-      conditionerFeature = offers.filter(function (it) {
-        return it;
+      offersCopy = offersCopy.filter(function (it) {
+        return it.offer.features.some(function (feature) {
+          return feature === 'conditioner';
+        });
       });
     }
 
-    var filteredOffers = offers.filter(function (it) {
-      for (var i = 0; i < sameTypeOfHouse.length; i++) {
-        if (it === sameTypeOfHouse[i]) {
-          var featuresOffers = it;
-        }
-      }
-      return featuresOffers;
-    }).filter(function (it) {
-      for (var i = 0; i < samePriceOfHouse.length; i++) {
-        if (it === samePriceOfHouse[i]) {
-          var featuresOffers = it;
-        }
-      }
-      return featuresOffers;
-    }).filter(function (it) {
-      for (var i = 0; i < sameRoomsOfHouse.length; i++) {
-        if (it === sameRoomsOfHouse[i]) {
-          var featuresOffers = it;
-        }
-      }
-      return featuresOffers;
-    }).filter(function (it) {
-      for (var i = 0; i < sameGuestsOfHouse.length; i++) {
-        if (it === sameGuestsOfHouse[i]) {
-          var featuresOffers = it;
-        }
-      }
-      return featuresOffers;
-    }).filter(function (it) {
-      for (var i = 0; i < wifiFeature.length; i++) {
-        if (it === wifiFeature[i]) {
-          var featuresOffers = it;
-        }
-      }
-      return featuresOffers;
-    }).filter(function (it) {
-      for (var i = 0; i < dishwasherFeature.length; i++) {
-        if (it === dishwasherFeature[i]) {
-          var featuresOffers = it;
-        }
-      }
-      return featuresOffers;
-    }).filter(function (it) {
-      for (var i = 0; i < parkingFeature.length; i++) {
-        if (it === parkingFeature[i]) {
-          var featuresOffers = it;
-        }
-      }
-      return featuresOffers;
-    }).filter(function (it) {
-      for (var i = 0; i < washerFeature.length; i++) {
-        if (it === washerFeature[i]) {
-          var featuresOffers = it;
-        }
-      }
-      return featuresOffers;
-    }).filter(function (it) {
-      for (var i = 0; i < elevatorFeature.length; i++) {
-        if (it === elevatorFeature[i]) {
-          var featuresOffers = it;
-        }
-      }
-      return featuresOffers;
-    }).filter(function (it) {
-      for (var i = 0; i < conditionerFeature.length; i++) {
-        if (it === conditionerFeature[i]) {
-          var featuresOffers = it;
-        }
-      }
-      return featuresOffers;
-    });
-    window.renderPin(filteredOffers);
+    window.renderPin(offersCopy);
   };
 
   var successHandler = function (data) {
     offers = data;
-    updatePins();
+    updatePins(offers);
   };
 
   var errorHandler = function (errorMessage) {
@@ -320,6 +192,10 @@
     mapPin.removeEventListener('mousedown', onPinMousedown);
   };
 
+  var onFilterChange = window.debounce(function () {
+    updatePins(offers);
+  });
+
   window.main = {
     doActiveMode: function () {
       window.backend.load(successHandler, errorHandler);
@@ -329,41 +205,42 @@
       window.utils.deleteAttributeDisabled(fieldset);
 
       addForm.classList.remove('ad-form--disabled');
+
+      typeOfHouse.addEventListener('change', onFilterChange);
+
+      priceOfHouse.addEventListener('change', onFilterChange);
+
+      numberOfRooms.addEventListener('change', onFilterChange);
+
+      numberOfGuests.addEventListener('change', onFilterChange);
+
+      featuresOfHouse.addEventListener('change', onFilterChange);
     },
     doInactiveMode: function () {
       map.classList.add('map--faded');
       window.utils.addAttributeDisabled(fieldset);
       window.utils.addAttributeDisabled(mapFilters);
       addForm.classList.add('ad-form--disabled');
-      var mapPins = document.getElementById('map__pins');
       mapPins.innerHTML = '';
       mapPins.appendChild(mapPin);
       mapPins.appendChild(mapOverlay);
       mapPin.addEventListener('mousedown', onPinMousedown);
       mapPin.addEventListener('keydown', onPinKeydown);
+      mapPin.style.left = MapPinCoordinates.LEFT + 'px';
+      mapPin.style.top = MapPinCoordinates.TOP + 'px';
+
+      typeOfHouse.removeEventListener('change', onFilterChange);
+
+      priceOfHouse.removeEventListener('change', onFilterChange);
+
+      numberOfRooms.removeEventListener('change', onFilterChange);
+
+      numberOfGuests.removeEventListener('change', onFilterChange);
+
+      featuresOfHouse.removeEventListener('change', onFilterChange);
     }
   };
 
   mapPin.addEventListener('mousedown', onPinMousedown);
   mapPin.addEventListener('keydown', onPinKeydown);
-
-  typeOfHouse.addEventListener('change', window.debounce(function () {
-    updatePins();
-  }));
-
-  priceOfHouse.addEventListener('change', window.debounce(function () {
-    updatePins();
-  }));
-
-  numberOfRooms.addEventListener('change', window.debounce(function () {
-    updatePins();
-  }));
-
-  numberOfGuests.addEventListener('change', window.debounce(function () {
-    updatePins();
-  }));
-
-  featuresOfHouse.addEventListener('change', window.debounce(function () {
-    updatePins();
-  }));
 })();
