@@ -14,9 +14,13 @@
   var numberOfRooms = document.querySelector('#housing-rooms');
   var numberOfGuests = document.querySelector('#housing-guests');
   var featuresOfHouse = document.querySelector('#housing-features');
+  var address = document.querySelector('#address');
+  var buttonReset = document.querySelector('.ad-form__reset');
+  var form = document.querySelector('.ad-form');
+
   var MapPinCoordinates = {
-    LEFT: 570,
-    TOP: 375
+    LEFT: 595,
+    TOP: 410
   };
 
   window.utils.addAttributeDisabled(fieldset);
@@ -59,6 +63,12 @@
     window.updatePins(offers);
   });
 
+  var resetForm = function () {
+    form.reset();
+    window.main.doInactiveMode();
+    buttonReset.removeEventListener('click', resetForm);
+  };
+
   window.main = {
     doActiveMode: function () {
       window.backend.load(successHandler, errorHandler);
@@ -78,6 +88,8 @@
       numberOfGuests.addEventListener('change', onFilterChange);
 
       featuresOfHouse.addEventListener('change', onFilterChange);
+
+      buttonReset.addEventListener('click', resetForm);
     },
     doInactiveMode: function () {
       map.classList.add('map--faded');
@@ -91,6 +103,16 @@
       mapPin.addEventListener('keydown', onPinKeydown);
       mapPin.style.left = MapPinCoordinates.LEFT + 'px';
       mapPin.style.top = MapPinCoordinates.TOP + 'px';
+      address.value = MapPinCoordinates.LEFT + ', ' + MapPinCoordinates.TOP;
+      typeOfHouse.value = 'any';
+      priceOfHouse.value = 'any';
+      numberOfRooms.value = 'any';
+      numberOfGuests.value = 'any';
+      for (var i = 0; i < featuresOfHouse.children.length; i++) {
+        if (featuresOfHouse.children[i].type === 'checkbox') {
+          featuresOfHouse.children[i].checked = false;
+        }
+      }
 
       typeOfHouse.removeEventListener('change', onFilterChange);
 
