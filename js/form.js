@@ -86,8 +86,17 @@
   };
 
   var successHandler = function () {
+    var mainPin = document.querySelector('.map__pin--main');
+    var address = document.querySelector('#address');
+    var PinSize = {
+      WIDTH: 50,
+      HEIGHT: 70
+    };
     body.appendChild(successMessage);
     form.reset();
+    var x = mainPin.offsetLeft + PinSize.WIDTH / 2;
+    var y = mainPin.offsetTop + PinSize.HEIGHT / 2;
+    address.value = x + ', ' + y;
     window.main.doInactiveMode();
 
     document.addEventListener('keydown', onMessageEscPress);
