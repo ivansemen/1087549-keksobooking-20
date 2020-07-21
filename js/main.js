@@ -2,6 +2,7 @@
 
 (function () {
   var mapFilters = document.querySelectorAll('.map__filters select');
+  var filterForm = document.querySelector('.map__filters');
   var fieldset = document.querySelectorAll('fieldset');
   var map = document.querySelector('.map');
   var mapPins = document.getElementById('map__pins');
@@ -17,6 +18,7 @@
   var address = document.querySelector('#address');
   var buttonReset = document.querySelector('.ad-form__reset');
   var form = document.querySelector('.ad-form');
+  var avatarPreviewSrc = 'img/muffin-grey.svg';
 
   var MapPinCoordinates = {
     LEFT: 595,
@@ -92,6 +94,10 @@
       buttonReset.addEventListener('click', resetForm);
     },
     doInactiveMode: function () {
+      var photoContainer = document.querySelector('.ad-form__photo-container');
+      var previewPhoto = document.querySelector('.ad-form__photo');
+      var fileChooserPhoto = document.querySelector('.ad-form__upload');
+      var previewAvatar = document.querySelector('.ad-form-header__preview img');
       map.classList.add('map--faded');
       window.utils.addAttributeDisabled(fieldset);
       window.utils.addAttributeDisabled(mapFilters);
@@ -104,15 +110,13 @@
       mapPin.style.left = MapPinCoordinates.LEFT + 'px';
       mapPin.style.top = MapPinCoordinates.TOP + 'px';
       address.value = MapPinCoordinates.LEFT + ', ' + MapPinCoordinates.TOP;
-      typeOfHouse.value = 'any';
-      priceOfHouse.value = 'any';
-      numberOfRooms.value = 'any';
-      numberOfGuests.value = 'any';
-      for (var i = 0; i < featuresOfHouse.children.length; i++) {
-        if (featuresOfHouse.children[i].type === 'checkbox') {
-          featuresOfHouse.children[i].checked = false;
-        }
-      }
+      filterForm.reset();
+      previewAvatar.src = avatarPreviewSrc;
+
+      photoContainer.innerHTML = '';
+      previewPhoto.innerHTML = '';
+      photoContainer.appendChild(fileChooserPhoto);
+      photoContainer.appendChild(previewPhoto);
 
       typeOfHouse.removeEventListener('change', onFilterChange);
 
