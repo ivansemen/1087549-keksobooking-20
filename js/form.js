@@ -15,8 +15,6 @@
   var errorButton = document.querySelector('#error').content.querySelector('.error__button');
   var successMessage = successTemplate.cloneNode(true);
   var errorMessage = errorTemplate.cloneNode(true);
-  var buttonReset = document.querySelector('.ad-form__reset');
-
 
   var checkRoomNumberAndCapacity = function () {
     if (roomNumber.value === '1' && capacity.value !== '1') {
@@ -138,10 +136,4 @@
     evt.preventDefault();
   });
 
-  var resetForm = function () {
-    form.reset();
-    buttonReset.removeEventListener('click', resetForm);
-  };
-
-  buttonReset.addEventListener('click', resetForm);
 })();

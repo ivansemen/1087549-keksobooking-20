@@ -2,6 +2,7 @@
 
 (function () {
   var mapFilters = document.querySelectorAll('.map__filters select');
+  var filterForm = document.querySelector('.map__filters');
   var fieldset = document.querySelectorAll('fieldset');
   var map = document.querySelector('.map');
   var mapPins = document.getElementById('map__pins');
@@ -14,9 +15,14 @@
   var numberOfRooms = document.querySelector('#housing-rooms');
   var numberOfGuests = document.querySelector('#housing-guests');
   var featuresOfHouse = document.querySelector('#housing-features');
+  var address = document.querySelector('#address');
+  var buttonReset = document.querySelector('.ad-form__reset');
+  var form = document.querySelector('.ad-form');
+  var avatarPreviewSrc = 'img/muffin-grey.svg';
+
   var MapPinCoordinates = {
-    LEFT: 570,
-    TOP: 375
+    LEFT: 595,
+    TOP: 410
   };
 
   window.utils.addAttributeDisabled(fieldset);
@@ -59,6 +65,12 @@
     window.updatePins(offers);
   });
 
+  var resetForm = function () {
+    form.reset();
+    window.main.doInactiveMode();
+    buttonReset.removeEventListener('click', resetForm);
+  };
+
   window.main = {
     doActiveMode: function () {
       window.backend.load(successHandler, errorHandler);
@@ -78,8 +90,14 @@
       numberOfGuests.addEventListener('change', onFilterChange);
 
       featuresOfHouse.addEventListener('change', onFilterChange);
+
+      buttonReset.addEventListener('click', resetForm);
     },
     doInactiveMode: function () {
+      var photoContainer = document.querySelector('.ad-form__photo-container');
+      var previewPhoto = document.querySelector('.ad-form__photo');
+      var fileChooserPhoto = document.querySelector('.ad-form__upload');
+      var previewAvatar = document.querySelector('.ad-form-header__preview img');
       map.classList.add('map--faded');
       window.utils.addAttributeDisabled(fieldset);
       window.utils.addAttributeDisabled(mapFilters);
@@ -91,6 +109,14 @@
       mapPin.addEventListener('keydown', onPinKeydown);
       mapPin.style.left = MapPinCoordinates.LEFT + 'px';
       mapPin.style.top = MapPinCoordinates.TOP + 'px';
+      address.value = MapPinCoordinates.LEFT + ', ' + MapPinCoordinates.TOP;
+      filterForm.reset();
+      previewAvatar.src = avatarPreviewSrc;
+
+      photoContainer.innerHTML = '';
+      previewPhoto.innerHTML = '';
+      photoContainer.appendChild(fileChooserPhoto);
+      photoContainer.appendChild(previewPhoto);
 
       typeOfHouse.removeEventListener('change', onFilterChange);
 
