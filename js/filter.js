@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var PRICE_OF_HOUSE_MIN = 10000;
+  var PRICE_OF_HOUSE_MAX = 50000;
   var map = document.querySelector('.map');
   var mapPins = document.getElementById('map__pins');
   var mapContainer = document.querySelector('.map__filters-container');
@@ -13,7 +15,6 @@
   var filterWasher = document.getElementById('filter-washer');
   var filterElevator = document.getElementById('filter-elevator');
   var filterConditioner = document.getElementById('filter-conditioner');
-
 
   window.updatePins = function (array) {
     map.innerHTML = '';
@@ -30,17 +31,17 @@
     switch (priceOfHouse.value) {
       case 'middle':
         offersCopy = offersCopy.filter(function (it) {
-          return it.offer.price > 10000 && it.offer.price < 50000;
+          return it.offer.price > PRICE_OF_HOUSE_MIN && it.offer.price < PRICE_OF_HOUSE_MAX;
         });
         break;
       case 'low':
         offersCopy = offersCopy.filter(function (it) {
-          return it.offer.price <= 10000;
+          return it.offer.price <= PRICE_OF_HOUSE_MIN;
         });
         break;
       case 'high':
         offersCopy = offersCopy.filter(function (it) {
-          return it.offer.price >= 50000;
+          return it.offer.price >= PRICE_OF_HOUSE_MAX;
         });
         break;
       default:

@@ -1,6 +1,10 @@
 'use strict';
 
 (function () {
+  var BUNGALO_PLACEHOLDER = '0';
+  var FLAT_PLACEHOLDER = '1000';
+  var HOUSE_PLACEHOLDER = '5000';
+  var PALACE_PLACEHOLDER = '10000';
   var roomNumber = document.querySelector('#room_number');
   var capacity = document.querySelector('#capacity');
   var typeOfRoom = document.querySelector('#type');
@@ -38,20 +42,20 @@
   var checkTypeOfRoomAndPrice = function () {
     switch (typeOfRoom.value) {
       case 'bungalo':
-        price.setAttribute('min', '0');
-        price.placeholder = '0';
+        price.setAttribute('min', BUNGALO_PLACEHOLDER);
+        price.placeholder = BUNGALO_PLACEHOLDER;
         break;
       case 'flat':
-        price.setAttribute('min', '1000');
-        price.placeholder = '1000';
+        price.setAttribute('min', FLAT_PLACEHOLDER);
+        price.placeholder = FLAT_PLACEHOLDER;
         break;
       case 'house':
-        price.setAttribute('min', '5000');
-        price.placeholder = '5000';
+        price.setAttribute('min', HOUSE_PLACEHOLDER);
+        price.placeholder = HOUSE_PLACEHOLDER;
         break;
       case 'palace':
-        price.setAttribute('min', '10000');
-        price.placeholder = '10000';
+        price.setAttribute('min', PALACE_PLACEHOLDER);
+        price.placeholder = PALACE_PLACEHOLDER;
         break;
     }
   };

@@ -6,6 +6,7 @@
   var fieldset = document.querySelectorAll('fieldset');
   var map = document.querySelector('.map');
   var mapPins = document.getElementById('map__pins');
+  var mapContainer = document.querySelector('.map__filters-container');
   var addForm = document.querySelector('.ad-form');
   var offers = [];
   var mapOverlay = document.querySelector('.map__overlay');
@@ -112,6 +113,9 @@
       address.value = MapPinCoordinates.LEFT + ', ' + MapPinCoordinates.TOP;
       filterForm.reset();
       previewAvatar.src = avatarPreviewSrc;
+      map.innerHTML = '';
+      map.appendChild(mapPins);
+      map.appendChild(mapContainer);
 
       photoContainer.innerHTML = '';
       previewPhoto.innerHTML = '';
