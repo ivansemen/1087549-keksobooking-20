@@ -17,10 +17,9 @@
   };
 
   var checkImage = function (file) {
-    var isCorrectExtension = FILE_TYPES.some(function (it) {
+    return FILE_TYPES.some(function (it) {
       return file.name.toLowerCase().endsWith(it);
     });
-    return isCorrectExtension;
   };
 
   fileChooserAvatar.addEventListener('change', function () {
